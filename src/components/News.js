@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import NewsItem from "./NewsItem";
+import Spinner from "./Spinner";
 
 export class News extends Component {
   constructor() {
@@ -14,7 +15,7 @@ export class News extends Component {
   async componentDidMount() {
     // async function can wait for a promise to resolve
     let url =
-      "https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3c64745efc67492f8212eeb3a38b5d4a&page=1pageSize=20";
+      `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3c64745efc67492f8212eeb3a38b5d4a&page=1&pageSize=${this.props.pageSize}`;
 
     let data = await fetch(url);
     // console.log(data);
@@ -26,7 +27,10 @@ export class News extends Component {
   handlePrevClick = async () => {
     let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3c64745efc67492f8212eeb3a38b5d4a&page=${
       this.state.page - 1
-    }&pageSize=20`;
+    }&pageSize=${this.props.pageSize}`;
+
+    this.setState({loading: true});
+
     let data = await fetch(url);
     // console.log(data);
     let parsedData = await data.json(); //its a promise that the data could be parsed into json or converted into text..
@@ -34,25 +38,30 @@ export class News extends Component {
     this.setState({
       page: this.state.page - 1,
       articles: parsedData.articles,
+      loading: false
     });
   };
 
   handleNextClick = async () => {
-    if(this.state.page + 1 > Math.ceil(this.state.totalResults/20)) {
-
-
+    if(!this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)) {
+  
     }
     else{
       let url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=3c64745efc67492f8212eeb3a38b5d4a&page=${
         this.state.page + 1
-      }&pageSize=20`;
+      }&pageSize=${this.props.pageSize}`;
+      
+      this.setState({loading: true});
+
       let data = await fetch(url);
       // console.log(data);
       let parsedData = await data.json(); //its a promise that the data could be parsed into json or converted into text..
-  
+      
+      
       this.setState({
         page: this.state.page + 1,
         articles: parsedData.articles,
+        loading: false
       });
     }
    
@@ -60,9 +69,10 @@ export class News extends Component {
   render() {
     return (
       <div className="container my-3">
-        <h2>NewsCrumb - Top Headlines</h2>
+        <h2 className="text-center">NewsCrumb - Top Headlines</h2>
+        {this.state.loading &&<Spinner />}
         <div className="row">
-          {this.state.articles.map((element) => {
+          {!this.state.loading && this.state.articles.map((element) => {
             return (
               <div className="col-md-4" key={element.url}>
                 <NewsItem
@@ -85,7 +95,7 @@ export class News extends Component {
             {" "}
             &larr; Previous
           </button>
-          <button
+          <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults/this.props.pageSize)}
             type="button"
             className="btn btn-dark mx-3 px-4"
             onClick={this.handleNextClick}
