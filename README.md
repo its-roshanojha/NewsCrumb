@@ -1,3 +1,7 @@
+**NewsCrumb** is a news app that selects latest and best news from multiple national sources and summaries them to present in a short and precise way. This is a react App which is made using https://newsapi.org/
+
+**Glimpse of the project**
+![alt text](https://github.com/its-roshanojha/NewsCrumb/blob/master/chrome_JzKHViCuax.gif?raw=true)
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
