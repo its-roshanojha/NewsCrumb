@@ -124,7 +124,7 @@ export class News extends Component {
     return (
       <>
         <div className="container my-3">
-          <h2 className="text-center">
+          <h2 className="text-center" style={{marginTop: '90px', marginBottom:'30px'}}>
             NewsCrumb - Top {this.capitalizeFirstLetter(this.props.category)}{" "}
             Headlines
           </h2>
